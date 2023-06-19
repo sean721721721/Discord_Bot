@@ -2,6 +2,7 @@ import { Client, IntentsBitField } from 'discord.js';
 
 require('dotenv').config({ path: __dirname + '/.env' });
 const cCommandMap: Record<string, string> = {
+	'!commands': '查詢指令列表',
 	'!me': '查詢自己的積分',
 };
 const cProfileIdMap: Record<string, string> = {
@@ -12,8 +13,8 @@ const cProfileIdMap: Record<string, string> = {
 const client = new Client({
 	intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.MessageContent],
 });
-
 client.on('messageCreate', async (message) => {
+	console.log(message);
 	if (message.content === '!commands') {
 		const replyMessage = Object.keys(cCommandMap).reduce((acc, key) => `${acc}\n${key}: ${cCommandMap[key]}`, '');
 		await message.reply(replyMessage);
@@ -25,6 +26,13 @@ client.on('messageCreate', async (message) => {
 });
 client.on('ready', async () => {
 	console.log('Bot is ready!');
+	const channelArabia = client.channels.cache.get('1119987141624201356');
+	channelArabia.send(
+		`@everyone 你好，現在可以對我下達以下指令:flushed: \n\`\`\`${Object.keys(cCommandMap).reduce(
+			(acc, key) => `${acc}\n${key}: ${cCommandMap[key]}`,
+			''
+		)}\`\`\``
+	);
 });
 client.login(process.env.DISCORD_TOKEN);
 /**
