@@ -26,13 +26,13 @@ client.on('messageCreate', async (message) => {
 });
 client.on('ready', async () => {
 	console.log('Bot is ready!');
-	const channelArabia = client.channels.cache.get('1119987141624201356');
-	channelArabia.send(
-		`@everyone 你好，現在可以對我下達以下指令:flushed: \n\`\`\`${Object.keys(cCommandMap).reduce(
-			(acc, key) => `${acc}\n${key}: ${cCommandMap[key]}`,
-			''
-		)}\`\`\``
-	);
+	// const channelArabia = client.channels.cache.get(process.env.CHANNEL_ARABIA_ID);
+	// channelArabia.send(
+	// 	`@everyone 你好，現在可以對我下達以下指令:flushed: \n\`\`\`${Object.keys(cCommandMap).reduce(
+	// 		(acc, key) => `${acc}\n${key}: ${cCommandMap[key]}`,
+	// 		''
+	// 	)}\`\`\``
+	// );
 });
 client.login(process.env.DISCORD_TOKEN);
 /**
