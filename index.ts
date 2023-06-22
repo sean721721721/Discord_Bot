@@ -19,7 +19,10 @@ const client = new Client({
 });
 client.on('messageCreate', async (message) => {
 	if (message.content === '!commands') {
-		const replyMessage = Object.keys(cCommandMap).reduce((acc, key) => `${acc}\n${key}: ${cCommandMap[key]}`, '');
+		const replyMessage = `\`\`\`\n${Object.keys(cCommandMap).reduce(
+			(acc, key) => `${acc}\n${key.padEnd(9, ' ')} ${cCommandMap[key]}`,
+			''
+		)}\`\`\``;
 		await message.reply(replyMessage);
 	}
 	if (message.content === '!me') {
@@ -37,9 +40,9 @@ client.on('messageCreate', async (message) => {
 client.on('ready', async () => {
 	console.log('Bot is ready!');
 	// const channelArabia = client.channels.cache.get(process.env.CHANNEL_ARABIA_ID);
-	// channelArabia.send(
+	// (channelArabia as any).send(
 	// 	`@everyone 你好，現在可以對我下達以下指令:flushed: \n\`\`\`${Object.keys(cCommandMap).reduce(
-	// 		(acc, key) => `${acc}\n${key}: ${cCommandMap[key]}`,
+	// 		(acc, key) => `${acc}\n${key.padEnd(9, ' ')} ${cCommandMap[key]}`,
 	// 		''
 	// 	)}\`\`\``
 	// );
