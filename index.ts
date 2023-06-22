@@ -14,7 +14,6 @@ const client = new Client({
 	intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.MessageContent],
 });
 client.on('messageCreate', async (message) => {
-	console.log(message);
 	if (message.content === '!commands') {
 		const replyMessage = Object.keys(cCommandMap).reduce((acc, key) => `${acc}\n${key}: ${cCommandMap[key]}`, '');
 		await message.reply(replyMessage);
@@ -66,23 +65,42 @@ async function searchRating(userName: string): Promise<string> {
 			lastMatchTime: null,
 		},
 	};
-	const singleRatingResponse = await fetch(`https://aoe2.net/api/leaderboard?game=aoe2de&leaderboard_id=3&profile_id=${profile_id}`);
-	const teamRatingResponse = await fetch(`https://aoe2.net/api/leaderboard?game=aoe2de&leaderboard_id=4&profile_id=${profile_id}`);
+	const endPoint = 'https://api.ageofempires.com/api/v2/AgeII/GetMPFull';
+	const singleRatingResponse = await fetch(endPoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json; charset=utf-8',
+		},
+		body: JSON.stringify({
+			profileId: profile_id,
+			matchType: '3',
+		}),
+	});
+	const teamRatingResponse = await fetch(endPoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json; charset=utf-8',
+		},
+		body: JSON.stringify({
+			profileId: profile_id,
+			matchType: '4',
+		}),
+	});
 	if (!singleRatingResponse.ok && !teamRatingResponse.ok) {
 		return '抱歉，我找不到你的資料';
 	}
 	if (singleRatingResponse.ok) {
 		const data = await singleRatingResponse.json();
-		stats.name = data.leaderboard[0]?.name || null;
-		stats.single.rating = data.leaderboard[0]?.rating || null;
-		stats.single.lowestStreak = data.leaderboard[0]?.lowest_streak || null;
-		stats.single.highestStreak = data.leaderboard[0]?.highest_streak || null;
-		stats.single.games = data.leaderboard[0]?.games || null;
-		stats.single.wins = data.leaderboard[0]?.wins || null;
-		stats.single.losses = data.leaderboard[0]?.losses || null;
-		stats.single.drops = data.leaderboard[0]?.drops || null;
-		stats.single.lastMatchTime = data.leaderboard[0]?.last_match_time
-			? new Date(parseInt(`${data.leaderboard[0]?.last_match_time}`.padEnd(13, '0'))).toLocaleString()
+		stats.name = data.user?.userName || null;
+		stats.single.rating = data.user?.elo || null;
+		stats.single.lowestStreak = data.user?.lowest_streak || null;
+		stats.single.highestStreak = data.user?.highest_streak || null;
+		stats.single.games = data.user?.games || null;
+		stats.single.wins = data.user?.wins || null;
+		stats.single.losses = data.user?.losses || null;
+		stats.single.drops = data.user?.drops || null;
+		stats.single.lastMatchTime = data.user?.last_match_time
+			? new Date(parseInt(`${data.user?.last_match_time}`.padEnd(13, '0'))).toLocaleString()
 			: null;
 	}
 	if (teamRatingResponse.ok) {
