@@ -1,10 +1,13 @@
 import { Client, IntentsBitField } from 'discord.js';
+import { getMatchList } from './api/getMatchList';
 import { searchRating } from './api/searchRating';
 
 require('dotenv').config({ path: __dirname + '/.env' });
 const cCommandMap: Record<string, string> = {
 	'!commands': '查詢指令列表',
 	'!me': '查詢自己的積分',
+	'!recent:s': '查詢最近 10 場單人對戰結果',
+	'!recent:t': '查詢最近 10 場團隊對戰結果',
 };
 const cProfileIdMap: Record<string, string> = {
 	martren: '5742933',
@@ -20,8 +23,15 @@ client.on('messageCreate', async (message) => {
 		await message.reply(replyMessage);
 	}
 	if (message.content === '!me') {
+		const messageRef = await message.reply('斥侯正在蒐集情報...');
 		const replyMessage = await searchRating(cProfileIdMap, message.author.username);
-		await message.reply(replyMessage);
+		await messageRef.edit(replyMessage);
+	}
+	if (new RegExp(`^!recent:[st]`).test(message.content)) {
+		const isSolo = message.content === '!recent:s';
+		const messageRef = await message.reply('斥侯正在蒐集情報...');
+		const replyMessage = await getMatchList(cProfileIdMap, message.author.username, isSolo);
+		await messageRef.edit(replyMessage);
 	}
 });
 client.on('ready', async () => {

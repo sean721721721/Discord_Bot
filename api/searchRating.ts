@@ -96,15 +96,13 @@ export async function searchRating(profileIdMap: Record<string, string>, userNam
 		let singleData = '';
 		let teamData = '';
 		Object.keys(stats).forEach((key) => {
-			const statsData = `積分: \`${stats[key].rating || '??'}\` 目前連勝: \`${
+			const statsData = `積分: ${stats[key].rating || '??'} 目前連勝: ${
 				typeof stats[key].currentWinStreak === 'number' ? stats[key].currentWinStreak : '??'
-			}\` 勝場: \`${stats[key].totalWins || '??'}\` 敗場: \`${stats[key].totalLosses || '??'}\` 總場數: \`${
-				stats[key].totalMatches || '??'
-			}\``;
+			} 勝場: ${stats[key].totalWins || '??'} 敗場: ${stats[key].totalLosses || '??'} 總場數: ${stats[key].totalMatches || '??'}`;
 			if (key === 'single') singleData = statsData;
 			else if (key === 'team') teamData = statsData;
 		});
-		return `斥侯回報 🔔\n\n\`${stats.name}\`\n單人 ${singleData}\n團隊 ${teamData}`;
+		return `斥侯回報 🔔\n\n__${stats.name}__\n\`\`\`elm\n單人 ${singleData}\n團隊 ${teamData}\`\`\``;
 	} catch (error) {
 		console.error(error);
 		return '斥侯回報 🔔\n抱歉，我找不到你的資料';
