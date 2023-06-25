@@ -58,7 +58,7 @@ export async function getMatchList(profileIdMap: Record<string, string>, userNam
 			stats.matches.reduce((prev, { civilization, gameId, winLoss, timeAt }) => {
 				const { matchSummary, playerList } = playLists.find(({ matchSummary }) => matchSummary.gameId === gameId) || {};
 				const civ = `\`` + (civilizations[civilization] ?? '未知') + `\``;
-				const mapType = `\`` + mapTypes[matchSummary?.mapType] + `\``;
+				const mapType = `\`` + (mapTypes[matchSummary?.mapType] || matchSummary?.mapType) + `\``;
 				const winTeam = (playerList || []).filter(({ winLoss }) => winLoss === 'Win');
 				const loseTeam = (playerList || []).filter(({ winLoss }) => winLoss === 'Loss');
 				const winTeamDisplay = winTeam

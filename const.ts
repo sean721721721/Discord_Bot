@@ -73,4 +73,7 @@ export const mapTypes: Record<string, string> = {
 	Byzantium: '拜占庭',
 	Custom: '自訂',
 	Hideout: '藏身之處',
+	Coastalforest: '沿海森林',
+	Cityoflakes: '湖城',
+	Acclivity: '坡地',
 };
