@@ -70,7 +70,7 @@ export async function getMatchList(profileIdMap: Record<string, string>, userNam
 				prev += `${cResultDisplay[winLoss]} 文明: ${civ.padEnd(8, '\u3000')} 地圖: ${mapType.padEnd(
 					8,
 					'\u3000'
-				)} *__${formatDateString(new Date(timeAt))}__*\n\`\`\`diff\n${winTeamDisplay}\n${loseTeamDisplay}\`\`\`\n`;
+				)} 時間: *__${formatDateString(new Date(timeAt))}__*\n\`\`\`diff\n${winTeamDisplay}\n${loseTeamDisplay}\`\`\`\n`;
 				return prev;
 			}, '')
 		);
