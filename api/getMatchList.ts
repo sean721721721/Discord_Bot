@@ -2,8 +2,8 @@ import { civilizations, getMatchListEndPoint, getPlayerListEndPoint, mapTypes } 
 import { formatDateString } from '../utils';
 
 const cResultDisplay = {
-	Win: '❌',
-	Loss: '✅',
+	Win: '✅',
+	Loss: '❌',
 };
 
 /**
