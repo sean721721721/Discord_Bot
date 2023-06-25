@@ -1,8 +1,9 @@
-import { getMatchListEndPoint } from '../const';
+import { civilizations, getMatchListEndPoint, getPlayerListEndPoint, mapTypes } from '../const';
+import { formatDateString } from '../utils';
 
 const cResultDisplay = {
-	Win: '勝',
-	Loss: '敗',
+	Win: '❌',
+	Loss: '✅',
 };
 
 /**
@@ -34,16 +35,42 @@ export async function getMatchList(profileIdMap: Record<string, string>, userNam
 			return '斥侯回報 🔔\n抱歉，我找不到你的資料';
 		}
 		const matchListResponse = await response.json();
-		(matchListResponse.matchList || []).forEach((match) => {
+		const matchList = matchListResponse.matchList || [];
+		const playLists = await Promise.all<GameData[]>(
+			matchList.map(({ gameId }) =>
+				fetch(getPlayerListEndPoint, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json; charset=utf-8' },
+					body: JSON.stringify({ gameId: gameId, profileId: profile_id }),
+				}).then((res) => res.json())
+			)
+		);
+		matchList.forEach((match) => {
 			stats.matches.push({
 				timeAt: match.dateTime ? match.dateTime : null,
 				winLoss: match.winLoss,
+				civilization: match.civilization === 'Unknown' ? null : match.civilization,
+				gameId: match.gameId,
 			});
 		});
 		return (
 			`斥侯回報 🔔\n\n` +
-			stats.matches.reduce((prev, match) => {
-				prev += `__${new Date(match.timeAt).toLocaleString()}__ ${cResultDisplay[match.winLoss]}\n`;
+			stats.matches.reduce((prev, { civilization, gameId, winLoss, timeAt }) => {
+				const { matchSummary, playerList } = playLists.find(({ matchSummary }) => matchSummary.gameId === gameId) || {};
+				const civ = `\`` + (civilizations[civilization] ?? '未知') + `\``;
+				const mapType = `\`` + mapTypes[matchSummary?.mapType] + `\``;
+				const winTeam = (playerList || []).filter(({ winLoss }) => winLoss === 'Win');
+				const loseTeam = (playerList || []).filter(({ winLoss }) => winLoss === 'Loss');
+				const winTeamDisplay = winTeam
+					?.map(({ userName, civName }) => `+ ${userName} ${civilizations[civName] ?? civName}`)
+					.join('\n');
+				const loseTeamDisplay = loseTeam
+					?.map(({ userName, civName }) => `- ${userName} ${civilizations[civName] ?? civName}`)
+					.join('\n');
+				prev += `${cResultDisplay[winLoss]} 文明: ${civ.padEnd(8, '\u3000')} 地圖: ${mapType.padEnd(
+					8,
+					'\u3000'
+				)} *__${formatDateString(new Date(timeAt))}__*\n\`\`\`diff\n${winTeamDisplay}\n${loseTeamDisplay}\`\`\`\n`;
 				return prev;
 			}, '')
 		);
@@ -58,5 +85,41 @@ interface PlayerStats {
 	matches: Array<{
 		timeAt: Date;
 		winLoss: 'Win' | 'Loss';
+		civilization: string;
+		gameId: string;
 	}>;
+}
+
+interface MatchSummary {
+	gameId: string;
+	profileId: number;
+	userName: string | null;
+	avatarUrl: string | null;
+	dateTime: string;
+	matchLength: number;
+	playerCount: number;
+	victoryResultID: number;
+	mapType: string;
+	civilizationID: number;
+	civilization: string | null;
+	winLoss: string | null;
+}
+
+interface Player {
+	userId: string;
+	profileId: number;
+	userName: string;
+	avatarUrl: string;
+	elo: number | null;
+	playerStanding: number;
+	isHuman: boolean;
+	team: number;
+	civName: string;
+	winLoss: string;
+	matchReplayAvailable: boolean;
+}
+
+interface GameData {
+	matchSummary: MatchSummary;
+	playerList: Player[];
 }
