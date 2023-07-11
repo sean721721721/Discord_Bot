@@ -49,7 +49,12 @@ export async function getMatchList(profileIdMap: Record<string, string>, userNam
 			stats.matches.push({
 				timeAt: match.dateTime ? match.dateTime : null,
 				winLoss: match.winLoss,
-				civilization: match.civilization === 'Unknown' ? null : match.civilization,
+				civilization:
+					match.civilization === 'Unknown'
+						? null
+						: typeof match.civilization === 'string'
+						? match.civilization.trim()
+						: match.civilization,
 				gameId: match.gameId,
 			});
 		});

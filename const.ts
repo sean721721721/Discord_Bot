@@ -3,6 +3,7 @@ export const getMatchListEndPoint = 'https://api.ageofempires.com/api/v2/AgeII/G
 export const getPlayerListEndPoint = 'https://api.ageofempires.com/api/v2/AgeII/GetMPMatchDetail';
 export const civilizations: Record<string, string> = {
 	Aztecs: '阿茲特克',
+	Aztec: '阿茲特克',
 	Britons: '不列顛',
 	Byzantines: '拜占庭',
 	Celts: '塞爾特',
@@ -42,6 +43,9 @@ export const civilizations: Record<string, string> = {
 	Gurjaras: '瞿哲羅',
 	Hindustanis: '印度斯坦',
 	Romans: '羅馬',
+	Mayans: '馬雅',
+	Lithuanians: '立陶宛',
+	Burgundians: '勃根地',
 };
 export const mapTypes: Record<string, string> = {
 	Arabia: '阿拉伯',
