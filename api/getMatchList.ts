@@ -1,7 +1,7 @@
-import { civilizations, getMatchListEndPoint, getPlayerListEndPoint, mapTypes } from '../const';
+import { civilizations, getMatchDetailListEndPoint, getMatchListEndPoint, mapTypes } from '../const';
 import { formatDateString } from '../utils';
 
-const cResultDisplay = {
+export const cResultDisplay = {
 	Win: '✅',
 	Loss: '❌',
 };
@@ -38,7 +38,7 @@ export async function getMatchList(profileIdMap: Record<string, string>, userNam
 		const matchList = matchListResponse.matchList || [];
 		const playLists = await Promise.all<GameData[]>(
 			matchList.map(({ gameId }) =>
-				fetch(getPlayerListEndPoint, {
+				fetch(getMatchDetailListEndPoint, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json; charset=utf-8' },
 					body: JSON.stringify({ gameId: gameId, profileId: profile_id }),
@@ -85,7 +85,7 @@ export async function getMatchList(profileIdMap: Record<string, string>, userNam
 	}
 }
 /** 玩家狀態 */
-interface PlayerStats {
+export interface PlayerStats {
 	name: string | null;
 	matches: Array<{
 		timeAt: Date;
@@ -110,7 +110,7 @@ interface MatchSummary {
 	winLoss: string | null;
 }
 
-interface Player {
+export interface Player {
 	userId: string;
 	profileId: number;
 	userName: string;
@@ -124,7 +124,7 @@ interface Player {
 	matchReplayAvailable: boolean;
 }
 
-interface GameData {
+export interface GameData {
 	matchSummary: MatchSummary;
 	playerList: Player[];
 }

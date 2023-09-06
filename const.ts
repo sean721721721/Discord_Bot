@@ -1,6 +1,6 @@
 export const searchRatingEndPoint = 'https://api.ageofempires.com/api/v2/AgeII/GetMPFull';
 export const getMatchListEndPoint = 'https://api.ageofempires.com/api/v2/AgeII/GetMPMatchList';
-export const getPlayerListEndPoint = 'https://api.ageofempires.com/api/v2/AgeII/GetMPMatchDetail';
+export const getMatchDetailListEndPoint = 'https://api.ageofempires.com/api/v2/AgeII/GetMPMatchDetail';
 export const civilizations: Record<string, string> = {
 	Aztecs: '阿茲特克',
 	Aztec: '阿茲特克',
@@ -56,13 +56,13 @@ export const mapTypes: Record<string, string> = {
 	Continental: '大陸',
 	'Crater Lake': '火山口湖',
 	Fortress: '堡壘',
-	'Gold Rush': '淘金',
+	Gold_Rush: '淘金潮',
 	Highland: '高地',
 	Islands: '島嶼',
 	Mediterranean: '地中海',
 	Migration: '遷徙',
 	Rivers: '河流',
-	'Team Islands': '雙島',
+	Team_Islands: '團隊島嶼',
 	Yucatan: '猶加敦',
 	Nomad: '遊牧',
 	Iberia: '伊比利亞',
@@ -70,7 +70,7 @@ export const mapTypes: Record<string, string> = {
 	Mideast: '中東',
 	Texas: '德州',
 	Italy: '義大利',
-	'Central America': '中美洲',
+	Central_America: '中美洲',
 	France: '法國',
 	'Norse Lands': '北歐',
 	'Sea of Japan': '日本海',
