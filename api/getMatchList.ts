@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { civilizations, getMatchDetailListEndPoint, getMatchListEndPoint, mapTypes } from '../const';
 import { formatDateString } from '../utils';
 
@@ -47,7 +48,7 @@ export async function getMatchList(profileIdMap: Record<string, string>, userNam
 		);
 		matchList.forEach((match) => {
 			stats.matches.push({
-				timeAt: match.dateTime ? match.dateTime : null,
+				timeAt: match.dateTime ? dayjs(match.dateTime).add(8, 'hour').toDate() : null,
 				winLoss: match.winLoss,
 				civilization:
 					match.civilization === 'Unknown'

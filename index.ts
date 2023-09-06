@@ -52,7 +52,7 @@ client.on('ready', async () => {
 	// 		`PS. 有任何指令上的問題請輸入 \`!commands\``
 	// );
 	//#region 定期抓比賽資料
-	const cRecordedGameIds: string[] = [];
+	const cRecordedGameIds: string[] = ['257704343'];
 	setInterval(async () => {
 		const replyMessage = await getRealTimeMatches(Object.values(cProfileIdMap), cRecordedGameIds);
 		console.log(cRecordedGameIds);
