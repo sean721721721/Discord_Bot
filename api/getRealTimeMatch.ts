@@ -99,10 +99,9 @@ export async function getRealTimeMatches(profileIds: string[], recordedGameIds: 
 				const loseTeamDisplay = loseTeam
 					?.map(({ userName, civName }) => `- ${userName} ${civilizations[civName] ?? civName}`)
 					.join('\n');
-				prev += `${cResultDisplay[winLoss]} 文明: ${civ.padEnd(8, '\u3000')} 地圖: ${mapType.padEnd(
-					8,
-					'\u3000'
-				)} 時間: *__${formatDateString(new Date(timeAt))}__*\n\`\`\`diff\n${winTeamDisplay}\n${loseTeamDisplay}\`\`\`\n`;
+				prev += `${cResultDisplay[winLoss]} 地圖: ${mapType.padEnd(8, '\u3000')} 時間: *__${formatDateString(
+					new Date(timeAt)
+				)}__*\n\`\`\`diff\n${winTeamDisplay}\n${loseTeamDisplay}\`\`\`\n`;
 				return prev;
 			}, '')
 		);
