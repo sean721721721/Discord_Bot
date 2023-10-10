@@ -68,10 +68,10 @@ export async function getMatchList(profileIdMap: Record<string, string>, userNam
 				const winTeam = (playerList || []).filter(({ winLoss }) => winLoss === 'Win');
 				const loseTeam = (playerList || []).filter(({ winLoss }) => winLoss === 'Loss');
 				const winTeamDisplay = winTeam
-					?.map(({ userName, civName }) => `+ ${userName} ${civilizations[civName] ?? civName}`)
+					?.map(({ userName, civName }) => `+ ${userName} ${civilizations[civName.trim()] ?? civName.trim()}`)
 					.join('\n');
 				const loseTeamDisplay = loseTeam
-					?.map(({ userName, civName }) => `- ${userName} ${civilizations[civName] ?? civName}`)
+					?.map(({ userName, civName }) => `- ${userName} ${civilizations[civName.trim()] ?? civName.trim()}`)
 					.join('\n');
 				prev += `${cResultDisplay[winLoss]} 文明: ${civ.padEnd(8, '\u3000')} 地圖: ${mapType.padEnd(
 					8,
