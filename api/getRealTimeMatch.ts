@@ -87,17 +87,16 @@ export async function getRealTimeMatches(profileIds: string[], recordedGameIds: 
 		});
 		return (
 			`即時戰報 🐴🐴🐴\n\n` +
-			stats.matches.reduce((prev, { civilization, gameId, winLoss, timeAt }) => {
+			stats.matches.reduce((prev, { gameId, winLoss, timeAt }) => {
 				const { matchSummary, playerList } = playLists.find(({ matchSummary }) => matchSummary.gameId === gameId) || {};
-				const civ = `\`` + (civilizations[civilization] ?? '未知') + `\``;
 				const mapType = `\`` + (mapTypes[matchSummary?.mapType] || matchSummary?.mapType) + `\``;
 				const winTeam = (playerList || []).filter(({ winLoss }) => winLoss === 'Win');
 				const loseTeam = (playerList || []).filter(({ winLoss }) => winLoss === 'Loss');
 				const winTeamDisplay = winTeam
-					?.map(({ userName, civName }) => `+ ${userName} ${civilizations[civName] ?? civName}`)
+					?.map(({ userName, civName }) => `+ ${userName} ${civilizations[civName.trim()] ?? civName.trim()}`)
 					.join('\n');
 				const loseTeamDisplay = loseTeam
-					?.map(({ userName, civName }) => `- ${userName} ${civilizations[civName] ?? civName}`)
+					?.map(({ userName, civName }) => `- ${userName} ${civilizations[civName.trim()] ?? civName.trim()}`)
 					.join('\n');
 				prev += `${cResultDisplay[winLoss]} 地圖: ${mapType.padEnd(8, '\u3000')} 時間: *__${formatDateString(
 					new Date(timeAt)
